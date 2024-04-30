@@ -3,7 +3,7 @@ from typing import Tuple
 
 def DT_TOKEN() -> str:
     # TODO: change this to your duckietown token
-    dt_token = "PUT_YOUR_TOKEN_HERE"
+    dt_token = "dt1-3nT7FDbT7NLPrXykNJmqqh1v3gNnxJGCJFrBcMzqNF3ky4Q-43dzqWFnWd8KBa1yev1g3UKnzVxZkkTbfbbvK7HWeg2WPo6t46FcFquhc9SigQoyAc"
     return dt_token
 
 
@@ -16,7 +16,7 @@ def MODEL_NAME() -> str:
 def NUMBER_FRAMES_SKIPPED() -> int:
     # TODO: change this number to drop more frames
     # (must be a positive integer)
-    return 0
+    return 1
 
 
 def filter_by_classes(pred_class: int) -> bool:
@@ -37,8 +37,10 @@ def filter_by_classes(pred_class: int) -> bool:
     # Right now, this returns True for every object's class
     # TODO: Change this to only return True for duckies!
     # In other words, returning False means that this prediction is ignored.
-    return True
-
+    if pred_class == 0:
+        return True
+    else:
+        return False
 
 def filter_by_scores(score: float) -> bool:
     """
@@ -58,4 +60,11 @@ def filter_by_bboxes(bbox: Tuple[int, int, int, int]) -> bool:
                 This means the shape of bbox is (leftmost x pixel, topmost y, rightmost x, bottommost y)
     """
     # TODO: Like in the other cases, return False if the bbox should not be considered.
-    return True
+    lx,ty,rx,by = bbox
+    boxVol =  (rx-lx) * (by-ty)
+
+    # return boxVol <= 8
+    if boxVol <= 8:
+        return True
+    else: 
+        return False 
