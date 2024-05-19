@@ -3,7 +3,6 @@ from typing import Tuple
 import numpy as np
 import cv2
 
-
 def get_steer_matrix_left_lane_markings(shape: Tuple[int, int]) -> np.ndarray:
     """
     Args:
@@ -14,18 +13,17 @@ def get_steer_matrix_left_lane_markings(shape: Tuple[int, int]) -> np.ndarray:
                             using the masked left lane markings (numpy.ndarray)
     """
 
-    # TODO: implement your own solution here
-    center_x = shape[1] // 2  # Calculate image center
+    steer_matrix_left = np.random.rand(*shape)
+    n = len(steer_matrix_left)
+    m = len(steer_matrix_left[0])
+    steer_matrix_left[:, :] = 0
 
-    steer_matrix_left = np.zeros(shape=shape, dtype="float32")
 
-    for y in range(shape[0]):
-        for x in range(shape[1]):
-            distance_from_center = center_x - x
-            weight = max(0.0, 1 - abs(distance_from_center) / (shape[1] / 4)) 
-            weight *= -1.0
-            steer_matrix_left[y, x] = weight
-   
+    steer_matrix_left[n//2:, :m//4] = 1
+
+    for i in range(n):
+        for j in range(m):
+            steer_matrix_left[i,j] = max(0, 1-abs(((m//2)-j)/(m//4))) * (-1)
     return steer_matrix_left
 
 
@@ -40,16 +38,15 @@ def get_steer_matrix_right_lane_markings(shape: Tuple[int, int]) -> np.ndarray:
     """
 
     # TODO: implement your own solution here
-    center_x = shape[1] // 2  # Calculate image center
-
-    steer_matrix_right = np.zeros(shape=shape, dtype="float32")
-
-    for y in range(shape[0]):
-        for x in range(shape[1]):
-            distance_from_center = x - center_x
-            weight = max(0.0, 1 - abs(distance_from_center) / (shape[1] / 4)) 
-            steer_matrix_right[y, x] = weight
+    steer_matrix_right = np.random.rand(*shape)
+    n = len(steer_matrix_right)
+    m = len(steer_matrix_right[0])
+    steer_matrix_right[:, :] = 0
+    for i in range(n):
+        for j in range(m):
+            steer_matrix_right[i,j] = max(0, 1-abs(((m//2)-j)/(m//4)))
     return steer_matrix_right
+
 
 def detect_lane_markings(image: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     """
